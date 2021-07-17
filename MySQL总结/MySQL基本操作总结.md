@@ -434,7 +434,7 @@ select 字段1 AS 别名1,字段2 AS 别名2,字段3 ... from 表名;
         +------+------+----------+
         ```
 
-    3.  like (模糊查询: 注意 % 表示任意多字符 __ 表示任意一个字符)
+    3.  like (模糊查询: 注意 % 表示任意多字符 _ 表示任意一个字符)
 
         ```sql
         #查询第二个字符是a的name和其age
@@ -450,7 +450,7 @@ select 字段1 AS 别名1,字段2 AS 别名2,字段3 ... from 表名;
         +------+------+
         | Raja |   19 |
         +------+------+
-        #注意:想要查询带 __ 的需要转义符转义 \_ 
+        #注意:想要查询带 _ 的需要转义符转义 \_ 
         ```
 
 #### 排序 `ORDER BY`
@@ -637,8 +637,6 @@ group by#2
     ##这里使用where更好,效率更高
     ```
 
-    
-
     ```sql
     #查询不同job下,avg(sal)>20000的min(sal) 和 job 因为avg()不能在where中使用,所以需要使用having
     SELECT
@@ -781,7 +779,7 @@ FROM
     inner on			#连接条件 inner表示内连接,可以不写
     	p.id = s.id	#内连接中的等值连接
     where		#筛选条件
-    	p.sal>20000;
+    	p.sal > 20000;
     #结构更加清晰
     ```
 
@@ -1087,7 +1085,47 @@ ORDER BY
         1.  自然主键:主键和业务无关(推荐)
         2.  业务主键:主键值和业务相关,银行卡号,身份证号...
 
-4.  主键自增AUTO_INCREMENT
+4.  外键约束 
+
+    1.  外键约束: foreign key
+        外键字段:添加有外键约束的字段
+        外键值:外键字段中的每一个值。
+
+    2.  案例
+
+        ![image-20210717022811184](MySQL%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E6%80%BB%E7%BB%93.assets/image-20210717022811184.png)
+
+        注意:
+
+        ![image-20210717022859117](MySQL%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E6%80%BB%E7%BB%93.assets/image-20210717022859117.png)
+
+    3.  创建代码
+
+        ```sql
+        #先创父再创子
+        create table t_class{
+        	cno int,
+        	cname varchar(255),
+        	primary key(cno)
+        };
+        create table t_student{
+        	sno int,
+        	sname varchar(255),
+        	classno int,
+        	primary key(sno),
+        	foreign key(classno) references t_class(cno)#外键约束
+        };
+        #先删子,再删父
+        drop table if exists t_student;
+        drop table if exists t_class;
+        ```
+
+    4.  知识点
+
+        1.  外键可以为NULL
+        2.  外键引用的字段必须具有唯一性(一般都是主键)
+
+5.  主键自增 AUTO_INCREMENT
 
     特点:自动增加,从1开始
 
